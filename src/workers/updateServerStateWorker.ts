@@ -4,6 +4,7 @@ import { Compute } from '@/modules/compute';
 import { ServerState } from '@/modules/compute';
 import logger from '@/utils/logger';
 import { updateTaskStatus, TaskStatus } from '@/utils/redis';
+import { SlackWebhook } from '@/utils/slack';
 
 interface WorkerData {
   taskId: string;
@@ -51,6 +52,8 @@ async function updateServerState(): Promise<void> {
     pollInterval = 10000 // Default: check every 10 seconds
   } = workerData as WorkerData;
 
+  const slackWebhook = new SlackWebhook()
+
   try {
     logger.info(`[Worker ${taskId}] Starting server state update task`, {
       serverName,
@@ -77,6 +80,8 @@ async function updateServerState(): Promise<void> {
     if (!server) {
       throw new Error(`Server not found: ${serverName}. Please verify the server name is correct and exists in OpenStack.`);
     }
+
+    slackWebhook.sendWebhook(`Hey guys! I want to inform you that the "${serverName}" network bonding gateway status will be changed from ${server.status} to ${targetState}`)
 
     const serverId = server.id;
     logger.info(`[Worker ${taskId}] Found server`, {
@@ -206,6 +211,8 @@ async function updateServerState(): Promise<void> {
       }
     }
 
+    slackWebhook.sendWebhook(`"${serverName}" network bonding gateway status has been changed to "${targetState}"`)
+
     // Send success result
     const result: WorkerResult = {
       success: true,
@@ -227,6 +234,8 @@ async function updateServerState(): Promise<void> {
       error: error.message,
       stack: error.stack,
     });
+
+    slackWebhook.sendWebhook(`Hey guys! I've noticed that our automation has failed to update the "${serverName}" network bonding gateway to ${targetState}. Please check it immediately.`)
 
     // Update Redis task status to failed if taskKey is provided
     if (taskKey) {
