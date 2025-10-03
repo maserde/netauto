@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Disable unused variable checks for development
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
+    // Keep other checks for safety
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true
+  }
+}

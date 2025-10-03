@@ -1,0 +1,69 @@
+{
+  "compilerOptions": {
+    // Target modern JavaScript
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // Enable latest JavaScript features
+    "lib": ["ES2022"],
+
+    // Output configuration
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    // Enable source maps for debugging
+    "sourceMap": true,
+    "inlineSourceMap": false,
+
+    // Enable decorators if needed
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    // Strict type checking
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    // Additional checks
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+
+    // Module resolution
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    // Emit configuration
+    "removeComments": true,
+    "preserveConstEnums": true,
+
+    // Skip lib check for faster builds
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Path aliasing configuration (TypeScript 6.0+ compatible)
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/configs": ["./src/configs"],
+      "@/configs/*": ["./src/configs/*"],
+      "@/utils": ["./src/utils"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/modules": ["./src/modules"],
+      "@/modules/*": ["./src/modules/*"],
+      "@/types": ["./src/types"],
+      "@/types/*": ["./src/types/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]
+}
