@@ -48,8 +48,8 @@ COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
 # Copy tsconfig.json for tsconfig-paths to resolve path mappings at runtime
 COPY --chown=nodejs:nodejs tsconfig.json ./
 
-# Create logs directory
-RUN mkdir -p logs && chown -R nodejs:nodejs logs
+# Create logs directory with proper permissions
+RUN mkdir -p /app/logs && chmod 777 /app/logs
 
 # Switch to non-root user
 USER nodejs

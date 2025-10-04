@@ -1,4 +1,6 @@
 import winston from 'winston';
+import path from 'path';
+import fs from 'fs';
 
 const { combine, timestamp, printf, colorize, align, json, errors } = winston.format;
 
@@ -59,6 +61,16 @@ const getLogFormat = () => {
   return env === 'production' ? prodFormat : devFormat;
 };
 
+// Ensure logs directory exists
+const logsDir = path.join(process.cwd(), 'logs');
+if (!fs.existsSync(logsDir)) {
+  try {
+    fs.mkdirSync(logsDir, { recursive: true });
+  } catch (error) {
+    console.error('Failed to create logs directory:', error);
+  }
+}
+
 // Create transports based on environment
 const getTransports = (): winston.transport[] => {
   const env = process.env.NODE_ENV || 'development';
@@ -75,7 +87,7 @@ const getTransports = (): winston.transport[] => {
   // Error log file
   transports.push(
     new winston.transports.File({
-      filename: 'logs/error.log',
+      filename: path.join(logsDir, 'error.log'),
       level: 'error',
       handleExceptions: true,
       maxsize: 10485760, // 10MB
@@ -91,7 +103,7 @@ const getTransports = (): winston.transport[] => {
   // Warning log file
   transports.push(
     new winston.transports.File({
-      filename: 'logs/warning.log',
+      filename: path.join(logsDir, 'warning.log'),
       level: 'warn',
       maxsize: 10485760, // 10MB
       maxFiles: 5,
@@ -105,7 +117,7 @@ const getTransports = (): winston.transport[] => {
   // Combined log file
   transports.push(
     new winston.transports.File({
-      filename: 'logs/combined.log',
+      filename: path.join(logsDir, 'combined.log'),
       handleExceptions: true,
       maxsize: 10485760, // 10MB
       maxFiles: 5,
@@ -121,7 +133,7 @@ const getTransports = (): winston.transport[] => {
   if (env === 'development') {
     transports.push(
       new winston.transports.File({
-        filename: 'logs/debug.log',
+        filename: path.join(logsDir, 'debug.log'),
         level: 'debug',
         maxsize: 10485760, // 10MB
         maxFiles: 3,
