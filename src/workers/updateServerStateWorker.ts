@@ -81,8 +81,6 @@ async function updateServerState(): Promise<void> {
       throw new Error(`Server not found: ${serverName}. Please verify the server name is correct and exists in OpenStack.`);
     }
 
-    slackWebhook.sendWebhook(`Hey guys! I want to inform you that the "${serverName}" network bonding gateway status will be changed from ${server.status} to ${targetState}`)
-
     const serverId = server.id;
     logger.info(`[Worker ${taskId}] Found server`, {
       serverName,
@@ -132,6 +130,8 @@ async function updateServerState(): Promise<void> {
       parentPort?.postMessage(result);
       return;
     }
+
+    slackWebhook.sendWebhook(`Hey guys! I want to inform you that the "${serverName}" network bonding gateway status will be changed from ${server.status} to ${targetState}`)
 
     logger.info(`[Worker ${taskId}] Initiating state change`, {
       serverName,
