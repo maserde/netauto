@@ -369,6 +369,52 @@ View logs in Docker:
 docker-compose logs -f app
 ```
 
+## Automation Scripts
+
+The project includes automation scripts for managing server states, perfect for scheduled operations via cron.
+
+### Server Management Scripts
+
+Located in the `/scripts` directory:
+
+- **startup-tunnel.sh**: Starts a specified OpenStack/Peplink FusionHub server
+- **shutdown-tunnel.sh**: Stops a specified OpenStack/Peplink FusionHub server
+
+#### Script Usage
+
+Basic usage with default configuration:
+```bash
+./scripts/startup-tunnel.sh   # Starts default server
+./scripts/shutdown-tunnel.sh  # Stops default server
+```
+
+With environment variables:
+```bash
+SERVER_NAME="fusionhub_hiu_office" API_HOST="http://localhost:8888" ./scripts/startup-tunnel.sh
+SERVER_NAME="fusionhub_hiu_office" API_HOST="http://localhost:8888" ./scripts/shutdown-tunnel.sh
+```
+
+### Cron Scheduler Integration
+
+These scripts are designed for automated server management via cron. Perfect for:
+- Cost optimization (shut down development servers after hours)
+- Scheduled maintenance windows
+- Automatic disaster recovery testing
+
+#### Sample Crontab Configuration
+
+```bash
+# Edit crontab
+crontab -e
+
+# Office Hours Schedule (8 AM - 6 PM, Monday-Friday)
+0 8 * * 1-5 SERVER_NAME="fusionhub_office" API_HOST="http://localhost:8888" /path/to/scripts/startup-tunnel.sh >> /var/log/fusionhub.log 2>&1
+0 18 * * 1-5 SERVER_NAME="fusionhub_office" API_HOST="http://localhost:8888" /path/to/scripts/shutdown-tunnel.sh >> /var/log/fusionhub.log 2>&1
+
+# Weekend Maintenance (Restart Sunday 3 AM)
+0 3 * * 0 SERVER_NAME="fusionhub_prod" /path/to/scripts/shutdown-tunnel.sh && sleep 5 && /path/to/scripts/startup-tunnel.sh
+```
+
 ## Contributing
 
 1. Fork the repository
