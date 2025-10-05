@@ -1,4 +1,4 @@
-# Fusion Host
+# NetAuto
 
 A robust OpenStack server management application built with Node.js, TypeScript, and Express. This application provides webhook endpoints to manage OpenStack compute instances with automatic state synchronization, Redis caching, and Slack notifications.
 
