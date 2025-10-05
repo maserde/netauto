@@ -131,7 +131,8 @@ async function updateServerState(): Promise<void> {
       return;
     }
 
-    slackWebhook.sendWebhook(`Hey guys! I want to inform you that the "${serverName}" network bonding gateway status will be changed from ${server.status} to ${targetState}`)
+    if(targetState === 'UP') slackWebhook.sendWebhook(`Hey everyone! Just a heads up that we're setting up network bonding with the ${serverName} gateway. I'll keep you posted when it's up and running.`)
+    else slackWebhook.sendWebhook(`Hey everyone! We're shutting down network bonding to ${serverName} as we're outside critical hours now. I'll let you know once it's down.`)
 
     logger.info(`[Worker ${taskId}] Initiating state change`, {
       serverName,
@@ -211,7 +212,8 @@ async function updateServerState(): Promise<void> {
       }
     }
 
-    slackWebhook.sendWebhook(`"${serverName}" network bonding gateway status has been changed to "${targetState}"`)
+    if(targetState === 'UP') slackWebhook.sendWebhook(`Hey everyone! Network bonding is now live on the ${serverName} gateway.`)
+    else slackWebhook.sendWebhook(`Hey everyone, the network bonding gateway on ${serverName} has been successfully shut down.`)
 
     // Send success result
     const result: WorkerResult = {
