@@ -32,11 +32,13 @@ except ImportError:
     exit(1)
 
 try:
-    import redis
+    import redis  # type: ignore
+    HAS_REDIS = True
 except ImportError:
     print("⚠️ Warning: redis tidak ditemukan. Install dengan: pip install redis")
     print("Redis logging akan dinonaktifkan")
     redis = None
+    HAS_REDIS = False
 
 # Load .env file from parent directory
 def load_env_file():
@@ -152,7 +154,7 @@ class UDMMonitor:
 
     def setup_redis(self):
         """Setup Redis connection jika tersedia"""
-        if redis:
+        if HAS_REDIS and redis:
             try:
                 self.redis_client = redis.Redis(
                     host=self.redis_host,
